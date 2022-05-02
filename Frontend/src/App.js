@@ -5,6 +5,7 @@ import NewMeetupPage from "./pages/NewMeetup";
 import FavoritesPage from "./pages/Favorites";
 import Layout from "./components/layout/Layout";
 import Slider from "./components/ImageSlider/Slider";
+import UploadPage from "./pages/Upload";
 
 function App() {
   return (
@@ -12,6 +13,9 @@ function App() {
       <Switch>
         <Route path="/" exact>
           <AllMeetupsPage />
+        </Route>
+        <Route path="/upload">
+          <UploadPage />
         </Route>
         <Route path="/edit-transcript">
           <Slider />

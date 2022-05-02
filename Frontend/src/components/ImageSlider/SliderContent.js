@@ -3,6 +3,10 @@ import { useRef } from "react";
 
 import Card from "../ui/Card";
 
+function textupdate({textcontent, imageSlider}){
+  
+}
+
 function SliderContent({ activeIndex, imageSlider }) {
   const descriptionInputRef = useRef();
   //const enteredDescription = descriptionInputRef.current.value;

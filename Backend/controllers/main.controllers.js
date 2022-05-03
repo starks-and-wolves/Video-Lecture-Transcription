@@ -2,20 +2,12 @@ const express = require("express");
 const multer = require("multer");
 const extractAudio = require("ffmpeg-extract-audio");
 
-// const upload = multer({ dest: "uploads/" }).single("demo_image");
+const fetch = require("node-fetch");
+const fs = require("fs");
 
-// var storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, "./uploads");
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, file.originalname);
-//   },
-// });
+const url = "https://api.assemblyai.com/v2/upload";
 
-// var upload = multer({ storage: storage }).single("demo_image");
-
-const app = express();
+const ASSEMBLYAI_API_KEY = "ee8cb75cdd2142d492a4f9eb1c021deb";
 
 module.exports.uploadSlides = function uploadSlides(req, res) {
   try {
@@ -96,20 +88,76 @@ module.exports.extractAudioFunc = async function extractAudioFunc(req, res) {
   }
 };
 
-module.exports.transcribe = async function transcribe(req, res) {
+module.exports.uploadAudio = async function uploadAudio(req, res) {
   try {
-    const baseRoute =
-      "D:/Sem 3-2/Video Lecture Transcription/Project Main/Backend/routes/videos/";
-    const baseAudioRoute =
-      "D:/Sem 3-2/Video Lecture Transcription/Project Main/Backend/routes/audioFiles/";
-    const videoFileName = "input.mp4";
-    await extractAudio({
-      input: `${baseRoute}${videoFileName}`,
-      output: `${baseAudioRoute}test.mp3`,
-    });
-    return res.status(200).json({
-      ok: true,
-      message: "extracted audio test.mp3",
+    let audioPath =
+      "D:Sem 3-2Video Lecture TranscriptionProject MainBackend\routesaudioFiles\test.mp3";
+    fs.readFile(audioPath, (err, data) => {
+      if (err) {
+        return console.log(err);
+      }
+
+      const params = {
+        headers: {
+          authorization: ASSEMBLYAI_API_KEY,
+          "Transfer-Encoding": "chunked",
+        },
+        body: data,
+        method: "POST",
+      };
+
+      fetch(url, params)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(`Success: ${data}`);
+          console.log(`URL: ${data["upload_url"]}`);
+          // res.json({
+          //   ok: true,
+          //   data: data,
+          // });
+        })
+        .then((data) => {
+          console.log("hiii");
+          let audioUrl = data["upload_url"];
+          const data1 = {
+            audio_url: audioUrl,
+          };
+
+          const params = {
+            headers: {
+              authorization: ASSEMBLYAI_API_KEY,
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(data1),
+            method: "POST",
+          };
+
+          fetch(url, params)
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Success:", data);
+              console.log("ID:", data["id"]);
+              res.json({
+                ok: true,
+                data: data,
+                message: "upload",
+              });
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              res.json({
+                ok: false,
+                message: error,
+              });
+            });
+        })
+        .catch((error) => {
+          console.error(`Error: ${error}`);
+          res.json({
+            ok: false,
+            error: error,
+          });
+        });
     });
   } catch (err) {
     res.json({

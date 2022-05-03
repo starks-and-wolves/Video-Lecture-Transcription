@@ -12,6 +12,7 @@ const {
   uploadAudioFile,
   uploadFile,
   downloadFile,
+  transcribe,
 } = require("../controllers/transcription.controllers");
 
 const {
@@ -28,6 +29,7 @@ userRoute.route("/extractAudio").post(extractAudioFunc);
 userRoute.route("/uploadAudio").post(uploadAudioFile);
 userRoute.route("/uploadFile").post(uploadFile);
 userRoute.route("/downloadFile").get(downloadFile);
+userRoute.route("/transcribe").post(transcribe);
 // userRoute.route("/verify").post(verifyUser);
 
 // userRouters

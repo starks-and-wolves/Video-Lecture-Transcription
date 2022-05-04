@@ -16,6 +16,12 @@ const {
 } = require("../controllers/transcription.controllers");
 
 const {
+  textToSpeechfulltranscript,
+  slideText,
+  textToSpeechSlides,
+} = require("../controllers/tts.controllers");
+
+const {
   uploadSlides,
   uploadVideos,
   extractAudioFunc,
@@ -30,6 +36,9 @@ userRoute.route("/uploadAudio").post(uploadAudioFile);
 userRoute.route("/uploadFile").post(uploadFile);
 userRoute.route("/downloadFile").get(downloadFile);
 userRoute.route("/transcribe").post(transcribe);
+userRoute.route("/textToSpeechfulltranscript").post(textToSpeechfulltranscript);
+userRoute.route("/textToSpeechSlides").post(textToSpeechSlides);
+userRoute.route("/slideText").post(slideText);
 // userRoute.route("/verify").post(verifyUser);
 
 // userRouters

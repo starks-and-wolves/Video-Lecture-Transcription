@@ -119,6 +119,17 @@ module.exports.downloadFile = async function downloadFile(req, res) {
         case "completed":
           console.log(`Success: ${data}`);
           console.log(`Text: ${data.text}`);
+          fs.writeFile(
+            "D:/Sem 3-2/Video Lecture Transcription/Project Main/Backend/routes/textFiles/transcription.txt",
+            data.text,
+            function (err) {
+              if (err) {
+                return console.log(err);
+              }
+              console.log("The file was saved!");
+            }
+          );
+
           res.json({
             message: "Successfully transcribed",
             Transcription: data.text,

@@ -7,9 +7,9 @@ var videoshow = require("videoshow");
 const fetch = require("node-fetch");
 const fs = require("fs");
 
-const url = "https://api.assemblyai.com/v2/upload";
+const url = process.env.ASSEMBLYAI_API_BASE_URL;
 
-const ASSEMBLYAI_API_KEY = "ee8cb75cdd2142d492a4f9eb1c021deb";
+const ASSEMBLYAI_API_KEY = process.env.ASSEMBLYAI_API_KEY;
 
 module.exports.uploadSlides = function uploadSlides(req, res) {
   try {

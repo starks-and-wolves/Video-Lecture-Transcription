@@ -9,13 +9,12 @@ async function writePdfBytesToFile(fileName, pdfBytes) {
 
 module.exports.splitPDF = async function splitPDF(req, res) {
   try {
-    let pathToPdf =
-      "D:/Sem 3-2/Video Lecture Transcription/Project Main/Backend/routes/slides/InputSlides.pdf";
+    let pathToPdf = process.env.PATH_TO_PDF;
     const docmentAsBytes = await fs.promises.readFile(pathToPdf);
 
     // Load your PDFDocument
     const pdfDoc = await PDFDocument.load(docmentAsBytes);
-
+    const SPLIT_SLIDES = process.env.SPLIT_SLIDES;
     const numberOfPages = pdfDoc.getPages().length;
 
     for (let i = 0; i < numberOfPages; i++) {
@@ -25,12 +24,7 @@ module.exports.splitPDF = async function splitPDF(req, res) {
       const [copiedPage] = await subDocument.copyPages(pdfDoc, [i]);
       subDocument.addPage(copiedPage);
       const pdfBytes = await subDocument.save();
-      await writePdfBytesToFile(
-        `D:/Sem 3-2/Video Lecture Transcription/Project Main/Backend/routes/splitSlides/Slide-${
-          i + 1
-        }.pdf`,
-        pdfBytes
-      );
+      await writePdfBytesToFile(`${SPLIT_SLIDES}-${i + 1}.pdf`, pdfBytes);
     }
     res.json({
       ok: true,

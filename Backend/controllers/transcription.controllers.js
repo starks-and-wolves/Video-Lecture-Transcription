@@ -1,9 +1,9 @@
 const fetch = require("node-fetch");
 const fs = require("fs");
 
-const urlUpload = "https://api.assemblyai.com/v2/upload";
-const urlTranscript = "https://api.assemblyai.com/v2/transcript";
-const ASSEMBLYAI_API_KEY = "ee8cb75cdd2142d492a4f9eb1c021deb";
+const urlUpload = process.env.URL_UPLOAD;
+const urlTranscript = process.env.URL_TRANSCRIPT;
+const ASSEMBLYAI_API_KEY = process.env.ASSEMBLYAI_API_KEY;
 
 let downloadid;
 
@@ -94,7 +94,7 @@ module.exports.uploadFile = async function uploadFile(req, res) {
 module.exports.downloadFile = async function downloadFile(req, res) {
   try {
     let id = req.body.id;
-    const url = `https://api.assemblyai.com/v2/transcript/${id}`;
+    const url = `${urlTranscript}/${id}`;
 
     const params = {
       headers: {
@@ -163,8 +163,7 @@ module.exports.downloadFile = async function downloadFile(req, res) {
 module.exports.transcribe = async function transcribe(req, res) {
   try {
     let audioUrl_;
-    let audioPath =
-      "D:/Sem 3-2/Video Lecture Transcription/Project Main/Backend/routes/audioFiles/test.mp3";
+    let audioPath = process.env.AUDIO_PATH;
     fs.readFile(audioPath, (err, data) => {
       if (err) {
         return console.log(err);
